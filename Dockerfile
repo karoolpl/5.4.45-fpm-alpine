@@ -55,7 +55,7 @@ RUN set -xe \
 	&& gpg --batch --verify "$PHP_FILENAME.asc" "$PHP_FILENAME" \
 	&& rm -r "$GNUPGHOME" "$PHP_FILENAME.asc" \
 	&& mkdir -p /usr/src \
-	&& tar -jxf "$PHP_FILENAME" -C /usr/src \
+	&& tar -zxf "$PHP_FILENAME" -C /usr/src \
 	&& mv "/usr/src/php-$PHP_VERSION" /usr/src/php \
 	&& rm "$PHP_FILENAME" \
 	&& cd /usr/src/php \
