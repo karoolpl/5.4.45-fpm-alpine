@@ -109,6 +109,8 @@ RUN set -xe \
 		LDFLAGS="$PHP_LDFLAGS" \
 	&& docker-php-source extract \
 	&& cd /usr/src/php \
+	&& wget https://github.com/php/php-src/blob/PHP-5.6.40/config.guess \
+	&& wget https://github.com/php/php-src/blob/PHP-5.6.40/config.sub \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
 	&& ./configure \
 		--build="$gnuArch" \
