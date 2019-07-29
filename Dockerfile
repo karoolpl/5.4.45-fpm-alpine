@@ -59,6 +59,7 @@ ENV GPG_KEYS F38252826ACD957EF380D39F2F7956BC5DA04B5D
 ENV PHP_VERSION 5.4.45
 ENV PHP_URL="https://secure.php.net/get/php-5.4.45.tar.gz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-5.4.45.tar.gz.asc/from/this/mirror"
 ENV PHP_SHA256="25bc4723955f4e352935258002af14a14a9810b491a19400d76fcdfa9d04b28f" PHP_MD5=""
+ENV PATCHES_DIR /usr/src/patches
 
 RUN set -xe; \
 	\
@@ -109,8 +110,13 @@ RUN set -xe \
 		LDFLAGS="$PHP_LDFLAGS" \
 	&& docker-php-source extract \
 	&& cd /usr/src/php \
-	&& wget -O config.guess https://raw.githubusercontent.com/php/php-src/PHP-5.6.40/config.guess \
-	&& wget -O config.sub https://raw.githubusercontent.com/php/php-src/PHP-5.6.40/config.sub \
+# https://raw.githubusercontent.com/php/php-src/PHP-5.6.40/config.guess
+	&& cp "$PATCHES_DIR/config.guess" . \
+# https://raw.githubusercontent.com/php/php-src/PHP-5.6.40/config.sub
+	&& cp "$PATCHES_DIR/config.sub" . \
+# https://www.libressl.org/patches.html
+	&& patch -p0 < "$PATCHES_DIR/patch-ext_openssl_xp_ssl_c" \
+	&& patch -p0 < "$PATCHES_DIR/patch-ext_openssl_openssl_c" \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
 	&& ./configure \
 		--build="$gnuArch" \
