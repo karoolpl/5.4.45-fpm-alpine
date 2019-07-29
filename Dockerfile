@@ -94,6 +94,7 @@ RUN set -xe; \
 	apk del .fetch-deps
 
 COPY docker-php-source /usr/local/bin/
+COPY patches-for-alpine3.8 "$PATCHES_DIR"
 
 RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps \
